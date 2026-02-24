@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7830e94d2df344ed8320fd96180b256, type: 3}
+  m_Name: Ulun
+  m_EditorClassIdentifier: 
+  IngredientName: "\u041C\u043E\u043B\u043E\u0447\u043D\u044B\u0439 \u0443\u043B\u0443\u043D"
+  Icon: {fileID: 0}
+  WorldPrefab: {fileID: 1923729992064251876, guid: a7ac9604d07d8f988a4ccde826f6370c, type: 3}
+  Description: 
+  Category: 0
+  ShakeContribution: 1.427
+  Emotion: 0
