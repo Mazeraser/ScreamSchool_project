@@ -33,7 +33,14 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         [FoldoutGroup("Компоненты")]
         [SerializeField] private Slider progressSlider;
         [FoldoutGroup("Компоненты")]
+        [SerializeField] private Image filledSliderArea;
+        [FoldoutGroup("Компоненты")]
         [SerializeField] private BrewingMachine _brewingMachine;
+
+        [FoldoutGroup("Настройки")]
+        [SerializeField] private Color wrongColor;
+        [FoldoutGroup("Настройки")]
+        [SerializeField] private Color rightColor;
 
         [FoldoutGroup("Настройки")]
         [LabelText("Чувствительность тряски"), Range(0.001f, 0.01f)]
@@ -92,8 +99,23 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         }
         private void UpdateProgressUI()
         {
-            if (progressSlider != null)
+            if (progressSlider != null){
                 progressSlider.value = currentShakeProgress;
+                if(filledSliderArea!=null)
+                {
+                    if(currentShakeProgress==0){
+                        filledSliderArea.color=Color.white;
+                    }
+                    else{
+                        float lower = targetShakeTotal - acceptableRange;
+                        float upper = targetShakeTotal + acceptableRange;
+                        
+                        bool success = currentShakeProgress>=lower&&currentShakeProgress<=upper;
+
+                        filledSliderArea.color=success?rightColor:wrongColor;
+                    }
+                }
+            }
             Debug.Log($"Current progress: {currentShakeProgress}. Need: {targetShakeTotal-acceptableRange}-{targetShakeTotal+acceptableRange}");
         }
          public void StartShaking()
@@ -109,7 +131,7 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         }
         public void UpdateShaking()
         {
-            if (_currentState != BlendingStates.Shaking) return;
+            //if (_currentState != BlendingStates.Shaking) return;
             
             Vector3 currentMouse = Input.mousePosition;
             Vector3 delta = currentMouse - lastMousePosition;
@@ -164,7 +186,6 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
             else if((int)_brewingMachine.CurrentStateType==0)
             {
                 _brewingMachine.CurrentState.Interact(CreateBlendMemento());
-                ChangeState(0);
                 ResetMachine();
             }
         }

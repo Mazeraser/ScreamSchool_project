@@ -357,7 +357,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -5526,6 +5526,38 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6918325583225460439, guid: ba4129eebad426364bbd7e9ea64259fd, type: 3}
+      propertyPath: rightColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6918325583225460439, guid: ba4129eebad426364bbd7e9ea64259fd, type: 3}
+      propertyPath: rightColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6918325583225460439, guid: ba4129eebad426364bbd7e9ea64259fd, type: 3}
+      propertyPath: rightColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6918325583225460439, guid: ba4129eebad426364bbd7e9ea64259fd, type: 3}
+      propertyPath: rightColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6918325583225460439, guid: ba4129eebad426364bbd7e9ea64259fd, type: 3}
+      propertyPath: wrongColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6918325583225460439, guid: ba4129eebad426364bbd7e9ea64259fd, type: 3}
+      propertyPath: wrongColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6918325583225460439, guid: ba4129eebad426364bbd7e9ea64259fd, type: 3}
+      propertyPath: wrongColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6918325583225460439, guid: ba4129eebad426364bbd7e9ea64259fd, type: 3}
+      propertyPath: wrongColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6918325583225460439, guid: ba4129eebad426364bbd7e9ea64259fd, type: 3}
       propertyPath: progressSlider
       value: 
       objectReference: {fileID: 833128797}
@@ -5533,6 +5565,10 @@ PrefabInstance:
       propertyPath: _brewingMachine
       value: 
       objectReference: {fileID: 889964657}
+    - target: {fileID: 6918325583225460439, guid: ba4129eebad426364bbd7e9ea64259fd, type: 3}
+      propertyPath: filledSliderArea
+      value: 
+      objectReference: {fileID: 1965749897}
     - target: {fileID: 6918325583225460439, guid: ba4129eebad426364bbd7e9ea64259fd, type: 3}
       propertyPath: shakeSensitivity
       value: 0.001
@@ -5555,17 +5591,61 @@ PrefabInstance:
     m_TransformParent: {fileID: 684586769}
     m_Modifications:
     - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
+      propertyPath: rightColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
+      propertyPath: rightColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
+      propertyPath: rightColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
+      propertyPath: rightColor.r
+      value: 0.109312534
+      objectReference: {fileID: 0}
+    - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
+      propertyPath: wrongColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
+      propertyPath: wrongColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
+      propertyPath: wrongColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
+      propertyPath: wrongColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
       propertyPath: strengthSlider
       value: 
       objectReference: {fileID: 102681729}
     - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
+      propertyPath: filledSliderArea
+      value: 
+      objectReference: {fileID: 262999105}
+    - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
       propertyPath: availableRecipes.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
       propertyPath: availableRecipes.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: b5088b48cd5ff1b04b89da234a1641fa, type: 2}
+    - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
+      propertyPath: availableRecipes.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 873bb9ff8b1c0aed4be62832415f2330, type: 2}
+    - target: {fileID: 2370710781345590198, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
+      propertyPath: m_FlipY
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4874622073223005315, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
       propertyPath: m_Name
       value: Brewing Machine

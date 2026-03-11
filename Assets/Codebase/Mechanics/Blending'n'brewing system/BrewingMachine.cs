@@ -9,7 +9,6 @@ using Codebase.Mechanics.BlendingNBrewingSystem.BrewingStates;
 
 namespace Codebase.Mechanics.BlendingNBrewingSystem
 {
-    
     public class BrewingMachine : MonoBehaviour, IStateMachine<BlendMemento>, IResetable
     {
         public enum BrewingStates
@@ -34,11 +33,16 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         [SerializeField] private Image crystalFlame;
         [FoldoutGroup("Компоненты")]
         [SerializeField] private Slider strengthSlider;
+        [FoldoutGroup("Компоненты")]
+        [SerializeField] private Image filledSliderArea;
+
+        [FoldoutGroup("Настройки")]
+        [SerializeField] private Color wrongColor;
+        [FoldoutGroup("Настройки")]
+        [SerializeField] private Color rightColor;
 
         [FoldoutGroup("Настройки")]
         [SerializeField,LabelText("Скорость варки")] private float brewRate = 0.1f;
-        [FoldoutGroup("Настройки")]
-        [SerializeField,LabelText("Минимум крепости")] private float strengthTolerance = 0.05f;
 
         [FoldoutGroup("Настройки")]
         [SerializeField, Required] private List<RecipeData> availableRecipes;
@@ -48,14 +52,14 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         public BlendMemento CurrentBlend => currentBlend;
 
         [FoldoutGroup("Данные"), ShowInInspector, ReadOnly]
-        private RecipeData matchedRecipe;
-        public RecipeData MatchedRecipe => matchedRecipe;
+        private List<RecipeData> matchedRecipes=new List<RecipeData>();
+        public List<RecipeData> MatchedRecipes => matchedRecipes;
 
         [FoldoutGroup("Данные"), ShowInInspector, ReadOnly]
         private float currentStrength;
 
         [FoldoutGroup("Данные"), ShowInInspector, ReadOnly]
-        private bool isCrystalPlaced;
+        private CrystalData placedCrystal;
 
         [FoldoutGroup("Данные"), ShowInInspector, ReadOnly]
         internal bool isFlameLit;
@@ -72,7 +76,7 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
             _currentState = (BrewingStates)stateID;
             CurrentState.Enter();
         }
-        private RecipeData FindMatchingRecipe(IReadOnlyList<IngredientData> ingredients)
+        private void FindAllMatchingRecipes(IReadOnlyList<IngredientData> ingredients)
         {
             foreach (var recipe in availableRecipes)
             {
@@ -80,6 +84,15 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
                     continue;
 
                 bool match = recipe.requiredIngredients.All(ing => ingredients.Contains(ing));
+                if (match)
+                    matchedRecipes.Add(recipe);
+            }
+        }
+        private RecipeData FindMatchingRecipe(List<RecipeData> recipes,CrystalData placedCrystal)
+        {
+            foreach (var recipe in recipes)
+            {
+                bool match = recipe.crystal==placedCrystal;
                 if (match)
                     return recipe;
             }
@@ -98,19 +111,18 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
                 return;
             }
 
-            var recipe = FindMatchingRecipe(blend.Ingredients);
-            if (recipe == null)
+            FindAllMatchingRecipes(blend.Ingredients);
+            if (matchedRecipes.Count == 0)
             {
                 Debug.Log("Для этого набора ингредиентов нет рецепта");
                 return;
             }
 
             currentBlend = blend;
-            matchedRecipe = recipe;
             ChangeState((int)BrewingStates.BlendLoaded);
         }
 
-        public void PlaceCrystal()
+        public void PlaceCrystal(CrystalData data)
         {
             if (_currentState != BrewingStates.BlendLoaded)
             {
@@ -118,7 +130,7 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
                 return;
             }
 
-            isCrystalPlaced = true;
+            placedCrystal = data;
             ChangeState((int)BrewingStates.CrystalPlaced);
         }
         private void UpdateStrengthUI()
@@ -127,6 +139,21 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
             {
                 strengthSlider.value = currentStrength;
                 strengthSlider.maxValue = 1f;
+                if(filledSliderArea!=null)
+                {
+                    if(currentStrength==0){
+                        filledSliderArea.color=Color.white;
+                    }
+                    else{
+                        var matchedRecipe = FindMatchingRecipe(MatchedRecipes,placedCrystal);
+                        float target = matchedRecipe.targetStrength;
+                        float lower = target - matchedRecipe.strengthTolerance;
+                        float upper = target + matchedRecipe.strengthTolerance;
+                        bool success = currentStrength >= lower && currentStrength <= upper;
+
+                        filledSliderArea.color=success?rightColor:wrongColor;
+                    }
+                }
             }
         }
         public void IgniteCrystal()
@@ -144,11 +171,14 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         }
         private void EvaluateBrewResult()
         {
-            float target = matchedRecipe.targetStrength;
-            float lower = target - strengthTolerance;
-            float upper = target + strengthTolerance;
+            var matchedRecipe = FindMatchingRecipe(MatchedRecipes,placedCrystal);
 
-            bool success = currentStrength >= lower && currentStrength <= upper;
+            float target = matchedRecipe.targetStrength;
+            float lower = target - matchedRecipe.strengthTolerance;
+            float upper = target + matchedRecipe.strengthTolerance;
+
+            bool success = currentStrength >= lower && currentStrength <= upper; 
+            Debug.Log($"Текущая крепость-{currentStrength} Необходимо {lower}-{upper}");
             Debug.Log(success ? "Чай удался!" : "Чай испорчен: крепость не та");
 
             ChangeState((int)BrewingStates.Done);
@@ -164,9 +194,9 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         public void ResetMachine()
         {
             currentBlend = null;
-            matchedRecipe = null;
+            matchedRecipes = new List<RecipeData>();
             currentStrength = 0f;
-            isCrystalPlaced = false;
+            placedCrystal = null;
             isFlameLit = false;
             UpdateStrengthUI();
             UpdateFlameVisual();
@@ -179,6 +209,8 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
                 Debug.LogWarning("Сначала завершите варку");
                 return;
             }
+
+            var matchedRecipe = FindMatchingRecipe(MatchedRecipes,placedCrystal);
             if (matchedRecipe != null && matchedRecipe.finalTeaPrefab != null)
             {
                 Instantiate(matchedRecipe.finalTeaPrefab, brewOutputPoint.position, Quaternion.identity);
