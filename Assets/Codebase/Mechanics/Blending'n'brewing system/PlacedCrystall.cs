@@ -16,6 +16,12 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
             this.data = data;
             clickCount = 0;
         }
+        private void Update(){
+            if(machine!=null&&(int)machine.CurrentStateType==0)
+            {
+                Destroy(gameObject);
+            }
+        }
 
         private void OnMouseDown()
         {

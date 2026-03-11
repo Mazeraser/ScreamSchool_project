@@ -36,7 +36,7 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
             PlacedCrystal clickHandler = placedCrystal.AddComponent<PlacedCrystal>();
             clickHandler.Initialize(brewingMachine, data);
 
-            brewingMachine.PlaceCrystal();
+            brewingMachine.PlaceCrystal(data);
         }
     }
 }

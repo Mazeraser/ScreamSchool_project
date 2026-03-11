@@ -11,5 +11,6 @@ namespace Codebase.Mechanics.Data
         [Range(0f, 1f)] public float targetStrength = 0.7f;
         public float strengthTolerance = 0.1f;
         public GameObject finalTeaPrefab;
+        public CrystalData crystal;
     }
 }
