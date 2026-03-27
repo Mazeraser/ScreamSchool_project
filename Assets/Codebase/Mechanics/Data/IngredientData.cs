@@ -29,12 +29,7 @@ namespace Codebase.Mechanics.Data
         [FoldoutGroup("Параметры заварки")]
         [LabelText("Вклад в смешивание"), Range(0, 2)]
         public float ShakeContribution = 1f;
-
-        [FoldoutGroup("Параметры заварки")]
-        [EnumToggleButtons, LabelText("Эмоция от ингридиента")]
-        public EmotionType Emotion;
     }
 
     public enum IngredientCategory { Base, Aroma, Magic }
-    public enum EmotionType { Happyness, Sad, Fear, Angry }
 }

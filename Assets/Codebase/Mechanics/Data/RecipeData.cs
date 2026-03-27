@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 namespace Codebase.Mechanics.Data
 {
@@ -8,9 +9,12 @@ namespace Codebase.Mechanics.Data
     {
         public string recipeName;
         public List<IngredientData> requiredIngredients;
+        public CrystalData crystal;
         [Range(0f, 1f)] public float targetStrength = 0.7f;
         public float strengthTolerance = 0.1f;
         public GameObject finalTeaPrefab;
-        public CrystalData crystal;
+
+        [EnumToggleButtons, LabelText("Эмоция от напитка")]
+        public GuestEmotions Emotion;
     }
 }

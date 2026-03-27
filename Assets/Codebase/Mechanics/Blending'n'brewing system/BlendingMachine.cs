@@ -10,7 +10,6 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
 {
     public class BlendingMachine : MonoBehaviour, IStateMachine<IngredientData>, IResetable
     {
-        //TODO: Добавить цветовые подсказки по замешке на слайдер
         public enum BlendingStates
         {
             Idle = 0,
