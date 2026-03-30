@@ -29,6 +29,8 @@ namespace Codebase.Mechanics.Data
 		[LabelText("Префаб")]
 		public GameObject Prefab;
 		[LabelText("Айди клиента")]
-		public string guestId;
+		public string GuestId;
+		[LabelText("Требуемая крепость"), Range(0f, 1f)] 
+		public float NeedTarget=0.5f;
 	}
 }

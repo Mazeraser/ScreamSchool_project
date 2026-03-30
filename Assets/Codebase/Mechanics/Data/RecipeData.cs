@@ -11,7 +11,6 @@ namespace Codebase.Mechanics.Data
         public List<IngredientData> requiredIngredients;
         public CrystalData crystal;
         [Range(0f, 1f)] public float targetStrength = 0.7f;
-        public float strengthTolerance = 0.1f;
         public GameObject finalTeaPrefab;
 
         [EnumToggleButtons, LabelText("Эмоция от напитка")]

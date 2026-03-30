@@ -1121,8 +1121,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -6.61, y: 0}
-  m_SizeDelta: {x: 5, y: 5}
+  m_AnchoredPosition: {x: -7, y: 0}
+  m_SizeDelta: {x: 2, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &166407624
 MonoBehaviour:
@@ -2065,8 +2065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33de8053582f389279470e31381c3345, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  momentData:
-  - {fileID: 11400000, guid: eca903c545f303dc9ae6eef393f70f8a, type: 2}
+  guestsQueue: []
   guestPoint: {fileID: 1926486668}
 --- !u!1 &519985171
 GameObject:
@@ -2390,7 +2389,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 1.1278076, y: 5.942839, z: -0.0318861, w: 2.037284}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -4739,6 +4738,7 @@ GameObject:
   - component: {fileID: 1419960498}
   - component: {fileID: 1419960497}
   - component: {fileID: 1419960496}
+  - component: {fileID: 1419960499}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -4763,8 +4763,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 7.01, y: 0}
-  m_SizeDelta: {x: 5, y: 5}
+  m_AnchoredPosition: {x: 6.36, y: 2}
+  m_SizeDelta: {x: 3.3, y: 6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1419960496
 MonoBehaviour:
@@ -4860,6 +4860,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1419960494}
   m_CullTransparentMesh: 1
+--- !u!114 &1419960499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419960494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 519985172}
+          m_TargetAssemblyTypeName: Codebase.Infrastructure.CameraService, Assembly-CSharp
+          m_MethodName: SetDirection
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1454334278
 GameObject:
   m_ObjectHideFlags: 0
@@ -6408,7 +6437,7 @@ PrefabInstance:
       objectReference: {fileID: 262999105}
     - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
       propertyPath: availableRecipes.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
       propertyPath: availableRecipes.Array.data[0]
@@ -6418,6 +6447,14 @@ PrefabInstance:
       propertyPath: availableRecipes.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: 873bb9ff8b1c0aed4be62832415f2330, type: 2}
+    - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
+      propertyPath: availableRecipes.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: f074fcfe747cd5f5b84374ced77eaed8, type: 2}
+    - target: {fileID: 910908934956865085, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
+      propertyPath: availableRecipes.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 84b8e55dff9c5bd90bec18c6affb35d6, type: 2}
     - target: {fileID: 2370710781345590198, guid: 9133275ae5ae4fd68864b35d81e5fe48, type: 3}
       propertyPath: m_FlipY
       value: 0

@@ -7,7 +7,7 @@ namespace Codebase.Mechanics.GuestSystem
     public class GuestFacade : MonoBehaviour
     {
         //TODO: Прикрутить Один
-        [SerializeField]private MomentData[] momentData; //TODO: Переделать в очередь
+        [SerializeField]private MomentData[] guestsQueue;
         [SerializeField]private Transform guestPoint;
 
         private bool _dialogueWasStarted;
@@ -17,7 +17,7 @@ namespace Codebase.Mechanics.GuestSystem
         private void SpawnNextGuest()
         {
             _currentGuestIndex++;
-            if (_currentGuestIndex < guestsQueue.Count)
+            if (_currentGuestIndex < guestsQueue.Length)
             {
                 StartCoroutine(WaitUntilSpawn(guestsQueue[_currentGuestIndex]));
             }
@@ -62,7 +62,7 @@ namespace Codebase.Mechanics.GuestSystem
         }
 
         private void Start(){
-            if (guestsQueue != null && guestsQueue.Count > 0)
+            if (guestsQueue != null && guestsQueue.Length > 0)
                 SpawnNextGuest();
         }
     }

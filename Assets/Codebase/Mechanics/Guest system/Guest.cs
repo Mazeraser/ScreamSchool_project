@@ -1,4 +1,5 @@
 using Codebase.Mechanics.Data;
+using UnityEngine;
 
 namespace Codebase.Mechanics.GuestSystem
 {
@@ -9,11 +10,13 @@ namespace Codebase.Mechanics.GuestSystem
         public RecipeData ServedRecipe;
         public IStateMachine<Guest> StateMachine { get; private set; }
 
+        private const string KEY_PREFIX = "Loyalty_";
+
         public Guest(MomentData currentMoment)
         {
             StateMachine = new GuestStateMachine(this);
             CurrentMoment = currentMoment;
-            Loyalty = LoyaltyManager.GetLoyalty(currentMoment.guestId);
+            Loyalty = GetLoyalty(currentMoment.GuestId);
         }
         public void Interact()
         {
@@ -21,7 +24,7 @@ namespace Codebase.Mechanics.GuestSystem
         }
         public void SaveLoyalty()
         {
-            LoyaltyManager.SetLoyalty(CurrentMoment.guestId, Loyalty);
+            SetLoyalty(CurrentMoment.GuestId, Loyalty);
         }
 
         public static void SetLoyalty(string guestId, int value)

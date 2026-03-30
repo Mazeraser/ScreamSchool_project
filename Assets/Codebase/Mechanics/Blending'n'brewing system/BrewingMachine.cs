@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using Codebase.Mechanics.Data;
 using System.Linq;
 using Codebase.Mechanics.BlendingNBrewingSystem.BrewingStates;
+using Codebase.Mechanics.GuestSystem.GuestStates;
 
 namespace Codebase.Mechanics.BlendingNBrewingSystem
 {
@@ -54,6 +55,8 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         [FoldoutGroup("Данные"), ShowInInspector, ReadOnly]
         private List<RecipeData> matchedRecipes=new List<RecipeData>();
         public List<RecipeData> MatchedRecipes => matchedRecipes;
+
+        private RecipeData brewedRecipe;
 
         [FoldoutGroup("Данные"), ShowInInspector, ReadOnly]
         private float currentStrength;
@@ -147,8 +150,8 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
                     else{
                         var matchedRecipe = FindMatchingRecipe(MatchedRecipes,placedCrystal);
                         float target = matchedRecipe.targetStrength;
-                        float lower = target - matchedRecipe.strengthTolerance;
-                        float upper = target + matchedRecipe.strengthTolerance;
+                        float lower = target - EvaluationState.STRENGTH_TOLERANCY;
+                        float upper = target + EvaluationState.STRENGTH_TOLERANCY;
                         bool success = currentStrength >= lower && currentStrength <= upper;
 
                         filledSliderArea.color=success?rightColor:wrongColor;
@@ -171,11 +174,11 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         }
         private void EvaluateBrewResult()
         {
-            var matchedRecipe = FindMatchingRecipe(MatchedRecipes,placedCrystal);
+            brewedRecipe = FindMatchingRecipe(MatchedRecipes,placedCrystal);
 
-            float target = matchedRecipe.targetStrength;
-            float lower = target - matchedRecipe.strengthTolerance;
-            float upper = target + matchedRecipe.strengthTolerance;
+            float target = brewedRecipe.targetStrength;
+            float lower = target - EvaluationState.STRENGTH_TOLERANCY;
+            float upper = target + EvaluationState.STRENGTH_TOLERANCY;
 
             bool success = currentStrength >= lower && currentStrength <= upper; 
             Debug.Log($"Текущая крепость-{currentStrength} Необходимо {lower}-{upper}");
@@ -210,10 +213,14 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
                 return;
             }
 
-            var matchedRecipe = FindMatchingRecipe(MatchedRecipes,placedCrystal);
-            if (matchedRecipe != null && matchedRecipe.finalTeaPrefab != null)
+            if (brewedRecipe != null && brewedRecipe.finalTeaPrefab != null)
             {
-                Instantiate(matchedRecipe.finalTeaPrefab, brewOutputPoint.position, Quaternion.identity);
+                var teaObject = Instantiate(brewedRecipe.finalTeaPrefab, brewOutputPoint.position, Quaternion.identity);
+                var teaComponent = teaObject.GetComponent<BrewedTea>();
+                if (teaComponent != null)
+                {
+                    teaComponent.Initialize(brewedRecipe);
+                }
             }
             ResetMachine();
         }

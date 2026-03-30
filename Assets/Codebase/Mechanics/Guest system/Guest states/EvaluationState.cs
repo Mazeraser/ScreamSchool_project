@@ -1,28 +1,25 @@
 using UnityEngine;
 using System.Linq;
+using Codebase.Mechanics.Data;
 
 namespace Codebase.Mechanics.GuestSystem.GuestStates
 {
     public class EvaluationState : GuestStateBase
     {
         public EvaluationState(Guest guest) : base(guest, GuestStateID.Evaluation) { }
+        public const float STRENGTH_TOLERANCY=0.15F;
 
         private bool IsStrengthCorrect(RecipeData served, MomentData moment)
         {
-            // Если в MomentData нет целевой крепости, используем целевые параметры рецепта
-            // Поскольку крепость хранится в RecipeData, считаем, что гость ожидает именно этот рецепт
-            // Можно добавить в MomentData поле expectedStrength или использовать served.targetStrength как ожидание
-            // Пока допустим, что если рецепт совпадает, то и крепость подходит (она уже проверена в BrewingMachine)
-            return true;
+            return served.targetStrength-STRENGTH_TOLERANCY<=moment.NeedTarget&&moment.NeedTarget<=served.targetStrength+STRENGTH_TOLERANCY;
         }
 
         public override void Enter()
         {
-            bool emotionsMatched = _guest.CurrentMoment.Emotion==_guest.ServedRecipe.Emotion;
-            //TODO: Реализовать сравнение ингредиентов с итоговым напитком
-            bool ingredientsMatched = _guest.ServedRecipe.requiredIngredients.All(s => _guest.CurrentMoment.FavoriteIngredients.Contains(s) );
-            bool crystalMatch = served.crystal == moment.Сrystal;
-            bool strengthMatch = IsStrengthCorrect(served, moment);
+            int emotionsMatched = _guest.CurrentMoment.Emotion==_guest.ServedRecipe.Emotion ? 1:0;
+            int ingredientsMatched = _guest.ServedRecipe.requiredIngredients.All(s => _guest.CurrentMoment.FavoriteIngredients.Contains(s)) ? 1:0;
+            int crystalMatch = _guest.ServedRecipe.crystal == _guest.CurrentMoment.Сrystal ? 1:0;
+            int strengthMatch = IsStrengthCorrect(_guest.ServedRecipe, _guest.CurrentMoment) ? 1:0;
 
             int rating = emotionsMatched+ingredientsMatched+crystalMatch+strengthMatch;
             TextAsset evaluationText = null;
@@ -30,18 +27,18 @@ namespace Codebase.Mechanics.GuestSystem.GuestStates
             
             if (rating>=3)
             {
-                evaluationText = moment.GoodEvaluationDialogue;
+                evaluationText = _guest.CurrentMoment.GoodEvaluationDialogue;
                 _guest.Loyalty += 1;
             }
             else if (rating>=2&&rating<=3)
             {
-                evaluationText = moment.MidEvaluationDialogue;
-                _guest.Loyalty += -;
+                evaluationText = _guest.CurrentMoment.MidEvaluationDialogue;
+                _guest.Loyalty += 0;
             }
             else
             {
                 rating = 0;
-                evaluationText = moment.BadEvaluationDialogue;
+                evaluationText = _guest.CurrentMoment.BadEvaluationDialogue;
                 _guest.Loyalty -= -1;
             }
         }
