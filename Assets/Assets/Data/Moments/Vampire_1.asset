@@ -16,9 +16,9 @@ MonoBehaviour:
   FavoriteIngredients: []
   "\u0421rystal": {fileID: 0}
   Dialogue: {fileID: 4900000, guid: e876bea505958d052899cce9b6725d46, type: 3}
-  GoodEvaluationDialogue: {fileID: 0}
-  MidEvaluationDialogue: {fileID: 0}
-  BadEvaluationDialogue: {fileID: 0}
+  GoodEvaluationDialogue: {fileID: 4900000, guid: f9fd8e3cd1df74ab29275bff6d665887, type: 3}
+  MidEvaluationDialogue: {fileID: 4900000, guid: 4f4485a686ba8fa1182c24f2500564e5, type: 3}
+  BadEvaluationDialogue: {fileID: 4900000, guid: 9cd306f43e544677099d9de0a58cb733, type: 3}
   Prefab: {fileID: 4910177446901245845, guid: dc01d8e683959aed0a377fda0f7301f3, type: 3}
   GuestId: 
   NeedTarget: 0.5
