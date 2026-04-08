@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fb934abcd8406dfa8850f9d42e45a4f, type: 3}
+  m_Name: Test0
+  m_EditorClassIdentifier: 
+  Emotion: 0
+  FavoriteIngredients:
+  - {fileID: 11400000, guid: 2359df1b4c32bb873afe38d3cf759a1a, type: 2}
+  "\u0421rystal": {fileID: 11400000, guid: 5054ce69b9acea517998cf1cdab7a9c2, type: 2}
+  Dialogue: {fileID: 4900000, guid: e876bea505958d052899cce9b6725d46, type: 3}
+  GoodEvaluationDialogue: {fileID: 4900000, guid: f9fd8e3cd1df74ab29275bff6d665887, type: 3}
+  MidEvaluationDialogue: {fileID: 4900000, guid: 4f4485a686ba8fa1182c24f2500564e5, type: 3}
+  BadEvaluationDialogue: {fileID: 4900000, guid: 9cd306f43e544677099d9de0a58cb733, type: 3}
+  Prefab: {fileID: 4910177446901245845, guid: 727568c8ec9b61024b341e804bbe1615, type: 3}
+  GuestId: 0
+  NeedTarget: 0.3

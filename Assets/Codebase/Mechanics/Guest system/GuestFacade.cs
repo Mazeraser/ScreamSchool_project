@@ -1,14 +1,29 @@
 using System.Collections;
 using UnityEngine;
 using Codebase.Mechanics.Data;
+using Sirenix.OdinInspector;
 
 namespace Codebase.Mechanics.GuestSystem
 {
     public class GuestFacade : MonoBehaviour
     {
-        //TODO: Прикрутить Один
+        [LabelText("Очередь гостей на этот уровень")]
         [SerializeField]private MomentData[] guestsQueue;
-        [SerializeField]private Transform guestPoint;
+        
+        [FoldoutGroup("Настройки создания персонажей")]
+        [LabelText("Точка, в которой будет стоять гость")]
+        [SerializeField]
+        private Transform guestPoint;
+
+        [FoldoutGroup("Настройки создания персонажей")]
+        [LabelText("Время, за которое он дойдет до точки")]
+        [SerializeField]
+        private float moveDuration=0.5f;
+
+        [FoldoutGroup("Настройки создания персонажей")]
+        [LabelText("Начальное отклонение(откуда спавнится и начинает идти)")]
+        [SerializeField]
+        private Vector3 startOffset = new Vector3(-10f, 0f, 0f);
 
         private bool _dialogueWasStarted;
         private GuestBuilder _guestBuilder;
@@ -34,7 +49,7 @@ namespace Codebase.Mechanics.GuestSystem
         private void CreateGuest(MomentData moment){
             _dialogueWasStarted=false;
             _guestBuilder?.ResetMachine();
-            _guestBuilder=new GuestBuilder(moment);
+            _guestBuilder=new GuestBuilder(moment, moveDuration, startOffset);
             _guestBuilder.CreateGuest(guestPoint);
             _guestBuilder.SetEmotion();
 
@@ -62,8 +77,7 @@ namespace Codebase.Mechanics.GuestSystem
         }
 
         private void Start(){
-            if (guestsQueue != null && guestsQueue.Length > 0)
-                SpawnNextGuest();
+            SpawnNextGuest();
         }
     }
 }

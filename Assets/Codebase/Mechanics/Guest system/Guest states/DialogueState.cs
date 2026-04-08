@@ -20,8 +20,6 @@ namespace Codebase.Mechanics.GuestSystem.GuestStates
 
         public override void Enter()
         {
-            //TODO: Запуск диалога из MomentData.Dialogue
-            //TODO: Внедрить ink
             DialogueManager.Instance.StartDialogue(
                 _guest.CurrentMoment.Dialogue,
                 OnDialogueFinished,

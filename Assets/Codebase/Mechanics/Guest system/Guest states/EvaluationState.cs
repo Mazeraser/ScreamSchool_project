@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using Codebase.Mechanics.Data;
+using Codebase.Infrastructure;
 
 namespace Codebase.Mechanics.GuestSystem.GuestStates
 {
@@ -9,6 +10,15 @@ namespace Codebase.Mechanics.GuestSystem.GuestStates
         public EvaluationState(Guest guest) : base(guest, GuestStateID.Evaluation) { }
         public const float STRENGTH_TOLERANCY=0.15F;
 
+        private void OnDialogueStarted()
+        {
+            Debug.Log($"Диалог с гостем начат");
+        }
+        private void OnDialogueFinished()
+        {
+            Debug.Log($"Диалог с гостем завершен");
+            Interact(_guest);
+        }
         private bool IsStrengthCorrect(RecipeData served, MomentData moment)
         {
             return served.targetStrength-STRENGTH_TOLERANCY<=moment.NeedTarget&&moment.NeedTarget<=served.targetStrength+STRENGTH_TOLERANCY;
@@ -23,7 +33,6 @@ namespace Codebase.Mechanics.GuestSystem.GuestStates
 
             int rating = emotionsMatched+ingredientsMatched+crystalMatch+strengthMatch;
             TextAsset evaluationText = null;
-
             
             if (rating>=3)
             {
@@ -41,6 +50,10 @@ namespace Codebase.Mechanics.GuestSystem.GuestStates
                 evaluationText = _guest.CurrentMoment.BadEvaluationDialogue;
                 _guest.Loyalty -= -1;
             }
+            DialogueManager.Instance.StartDialogue(
+                evaluationText,
+                OnDialogueFinished,
+                OnDialogueStarted);
         }
         public override void Interact(Guest guest)
         {

@@ -30,8 +30,7 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
                 Destroy(child.gameObject);
             }
 
-            GameObject placedCrystal = Instantiate(data.worldPrefab, new Vector3(socket.position.x,socket.position.y,17f), socket.rotation);
-            placedCrystal.transform.SetParent(socket);
+            GameObject placedCrystal = Instantiate(data.worldPrefab, socket);
 
             PlacedCrystal clickHandler = placedCrystal.AddComponent<PlacedCrystal>();
             clickHandler.Initialize(brewingMachine, data);

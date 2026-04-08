@@ -23,7 +23,7 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
                 return;
             }
 
-            var facade = FindObjectOfType<GuestFacade>();
+            var facade = FindObjectOfType<GuestFacade>(); //TODO: Переписать.
             if (facade != null)
             {
                 facade.StartEvaluation(_recipeData);
@@ -38,6 +38,9 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         private void OnMouseDrag(){
             Vector3 currentMouse = Input.mousePosition;
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(currentMouse.x,currentMouse.y,1));
+        }
+        private void OnMouseUp(){
+            ServeToGuest();
         }
     }
 }
