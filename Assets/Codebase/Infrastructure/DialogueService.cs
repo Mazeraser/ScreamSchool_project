@@ -9,6 +9,7 @@ namespace Codebase.Infrastructure
     public class DialogueManager : MonoBehaviour
     {
         //BUG: Сделать заморозку камеры
+        //TODO: Добавить имя персонажа в диалоговое окно
         public static DialogueManager Instance { get; private set; }
 
         [Header("UI Elements")]
