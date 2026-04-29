@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b527c33ebf8345f980051d43f88320, type: 3}
   m_Name: Blue
   m_EditorClassIdentifier: 
-  crystalName: "\u0421\u0438\u043D\u0438\u0439 \u043A\u0440\u0438\u0441\u0442\u0430\u043B\u043B"
+  crystalName: "\u0425\u043E\u043B\u043E\u0434\u043D\u044B\u0439"
   worldPrefab: {fileID: 5519984061033230732, guid: 2b3d10550b2c69c12a608680cfc1e9bb, type: 3}
   icon: {fileID: 0}
   clicksToIgnite: 2

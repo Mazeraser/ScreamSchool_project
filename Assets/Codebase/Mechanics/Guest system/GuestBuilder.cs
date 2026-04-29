@@ -37,10 +37,9 @@ namespace Codebase.Mechanics.GuestSystem
             }
         }
         public void SetEmotion(){
-            GuestPresenter.SetEmotion(_momentData.Emotion);
+            GuestPresenter.SetEmotion(0);
         }
         public void ResetMachine(){
-            GuestPresenter.OnClicked=null;
             GuestPresenter=null;
             Guest=null;
             GameObject.Destroy(guestPresenterObject);

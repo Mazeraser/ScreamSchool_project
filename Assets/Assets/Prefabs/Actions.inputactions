@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "Actions",
+    "maps": [
+        {
+            "name": "History",
+            "id": "74227f44-9e3e-41db-b5c2-923ca84c28b6",
+            "actions": [
+                {
+                    "name": "Show/hide",
+                    "type": "Button",
+                    "id": "76c9cc34-957f-4038-a843-a40f27480a1e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a63681dd-5942-45aa-bc20-81db170db268",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Show/hide",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

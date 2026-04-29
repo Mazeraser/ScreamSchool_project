@@ -3,17 +3,20 @@ using Sirenix.OdinInspector;
 
 namespace Codebase.Mechanics.Data
 {
-	public enum GuestEmotions{
+	/*public enum GuestEmotions{
         Happyness=0, 
         Sad=1, 
         Fear=2, 
         Angry=3
-    }
+    }*/
 	[CreateAssetMenu(fileName="NewMoment", menuName="Guests/Moment Data")]
 	public class MomentData : ScriptableObject
 	{
+
+		[LabelText("Имя клиента")]
+		public string Name;
 		[LabelText("Эмоция")]
-		public GuestEmotions Emotion;
+		public string Emotion;
 		[LabelText("Пул необходимых ингредиентов в рецепте")]
 		public IngredientData[] FavoriteIngredients;
 		[LabelText("Необходимый кристал")]

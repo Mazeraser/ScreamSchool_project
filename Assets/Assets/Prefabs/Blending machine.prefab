@@ -81,8 +81,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0.47220826, b: 0.47220826, a: 1}
+  m_Sprite: {fileID: -1341765722, guid: 89d1d49b129d5d948b4cd30cf4c604ca, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -128,7 +128,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 6.9219995, y: 6.5000005}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -152,7 +152,12 @@ MonoBehaviour:
   _currentState: 0
   shakeHandle: {fileID: 4867861603353523912}
   progressSlider: {fileID: 0}
+  filledSliderArea: {fileID: 0}
+  _brewingMachine: {fileID: 0}
+  wrongColor: {r: 0, g: 0, b: 0, a: 0}
+  rightColor: {r: 0, g: 0, b: 0, a: 0}
   shakeSensitivity: 0.01
+  shakeSpeedThreshold: 10
   acceptableRange: 0.1
 --- !u!114 &3256834888767534961
 MonoBehaviour:

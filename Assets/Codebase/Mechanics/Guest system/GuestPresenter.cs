@@ -10,8 +10,8 @@ namespace Codebase.Mechanics.GuestSystem
         [SerializeField] private Sprite[] emotions = new Sprite[4];
         public Action OnClicked;
 
-        public void SetEmotion(GuestEmotions emotion){
-            GetComponent<SpriteRenderer>().sprite = emotions[(int)emotion];
+        public void SetEmotion(int emotion){
+            GetComponent<SpriteRenderer>().sprite = emotions[emotion];
         }
         private void OnMouseDown(){
             OnClicked?.Invoke();

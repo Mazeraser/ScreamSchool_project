@@ -23,7 +23,8 @@ namespace Codebase.Mechanics.GuestSystem.GuestStates
             DialogueManager.Instance.StartDialogue(
                 _guest.CurrentMoment.Dialogue,
                 OnDialogueFinished,
-                OnDialogueStarted
+                OnDialogueStarted,
+                _guest.CurrentMoment.Name
             );
         }
 

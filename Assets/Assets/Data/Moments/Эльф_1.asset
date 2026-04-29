@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fb934abcd8406dfa8850f9d42e45a4f, type: 3}
+  m_Name: "\u042D\u043B\u044C\u0444_1"
+  m_EditorClassIdentifier: 
+  Name: "\u041B\u043E\u0440\u0435\u0439\u043D"
+  Emotion: "\u0413\u0438\u043F\u0435\u0440\u0430\u043A\u0442\u0438\u0432\u043D\u043E\u0441\u0442\u044C"
+  FavoriteIngredients:
+  - {fileID: 11400000, guid: fc718eac55cb7b1d69eb4bfe44bb38eb, type: 2}
+  - {fileID: 11400000, guid: b3afcce8cd125240ca5649b3195d2404, type: 2}
+  - {fileID: 11400000, guid: c676d8992ff42fe5686e5844fdfc9de2, type: 2}
+  "\u0421rystal": {fileID: 11400000, guid: ae760c19d67a48699be2eeb6da376d82, type: 2}
+  Dialogue: {fileID: 4900000, guid: 71ce21cce7883e2008fdde655b8b5e41, type: 3}
+  GoodEvaluationDialogue: {fileID: 4900000, guid: e6dcad93006422319bbfeff59fe5efe4, type: 3}
+  MidEvaluationDialogue: {fileID: 4900000, guid: 3e9cb3d860743269fb6eaed92abf0bc7, type: 3}
+  BadEvaluationDialogue: {fileID: 4900000, guid: 84bbdfb38e7cb0d0d9a83bbd50c084b1, type: 3}
+  Prefab: {fileID: 4910177446901245845, guid: 2aef8f607c0e902919c4977c932663ca, type: 3}
+  GuestId: 
+  NeedTarget: 0.5

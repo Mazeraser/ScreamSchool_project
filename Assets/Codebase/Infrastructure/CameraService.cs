@@ -22,12 +22,12 @@ namespace Codebase.Infrastructure
         private async UniTask FadeIn(float fadeTime)
         {
             if(_canvasGroup!=null)
-                await _canvasGroup.DOFade(1f,fadeTime).OnComplete(()=>{Debug.Log("Fade in");}).AsyncWaitForCompletion();;
+                await _canvasGroup.DOFade(0f,fadeTime).OnComplete(()=>{Debug.Log("Fade in");}).AsyncWaitForCompletion();;
         }
         private async UniTask FadeOut(float fadeTime)
         {
             if(_canvasGroup!=null)
-                await _canvasGroup.DOFade(0f,fadeTime).OnComplete(()=>{Debug.Log("Fade out");}).AsyncWaitForCompletion();;
+                await _canvasGroup.DOFade(1f,fadeTime).OnComplete(()=>{Debug.Log("Fade out");}).AsyncWaitForCompletion();;
         }
 
         [Button]

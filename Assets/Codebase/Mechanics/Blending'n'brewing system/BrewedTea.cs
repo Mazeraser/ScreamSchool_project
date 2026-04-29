@@ -8,11 +8,13 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
 {
     public class BrewedTea : MonoBehaviour
     {
-        [SerializeField] private RecipeData _recipeData;
+        private RecipeData _recipeData;
+        private Transform _guestServePoint;
 
-        public void Initialize(RecipeData data)
+        public void Initialize(RecipeData data, Transform guestServePoint)
         {
             _recipeData = data;
+            _guestServePoint = guestServePoint;
         }
 
         public void ServeToGuest()
@@ -35,12 +37,11 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
             }
         }
 
-        private void OnMouseDrag(){
-            Vector3 currentMouse = Input.mousePosition;
-            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(currentMouse.x,currentMouse.y,1));
-        }
-        private void OnMouseUp(){
-            ServeToGuest();
+        private void OnMouseDown(){
+            if(_guestServePoint!=null && transform.position!=_guestServePoint.position)
+                transform.position = _guestServePoint.position;
+            else
+                ServeToGuest();
         }
     }
 }

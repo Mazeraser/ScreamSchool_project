@@ -1,5 +1,6 @@
 using Codebase.Mechanics.Data;
 using UnityEngine;
+using System;
 
 namespace Codebase.Mechanics.GuestSystem
 {
@@ -12,16 +13,20 @@ namespace Codebase.Mechanics.GuestSystem
 
         private const string KEY_PREFIX = "Loyalty_";
 
+        public event Action OnGuestFinished;
+
         public Guest(MomentData currentMoment)
         {
             StateMachine = new GuestStateMachine(this);
             CurrentMoment = currentMoment;
             Loyalty = GetLoyalty(currentMoment.GuestId);
         }
+
         public void Interact()
         {
             StateMachine.CurrentState.Interact(this);
         }
+
         public void SaveLoyalty()
         {
             SetLoyalty(CurrentMoment.GuestId, Loyalty);
@@ -32,10 +37,15 @@ namespace Codebase.Mechanics.GuestSystem
             PlayerPrefs.SetInt(KEY_PREFIX + guestId, value);
             PlayerPrefs.Save();
         }
+
         public static int GetLoyalty(string guestId, int defaultValue = 0)
         {
             return PlayerPrefs.GetInt(KEY_PREFIX + guestId, defaultValue);
         }
+
+        public void Finish()
+        {
+            OnGuestFinished?.Invoke();
+        }
     }
 }
-    

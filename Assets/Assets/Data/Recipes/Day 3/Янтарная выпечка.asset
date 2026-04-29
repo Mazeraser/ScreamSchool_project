@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f350f3ca8b41b4f3eb7fe0e64e49988a, type: 3}
+  m_Name: "\u042F\u043D\u0442\u0430\u0440\u043D\u0430\u044F \u0432\u044B\u043F\u0435\u0447\u043A\u0430"
+  m_EditorClassIdentifier: 
+  recipeName: "\u042F\u043D\u0442\u0430\u0440\u043D\u0430\u044F \u0432\u044B\u043F\u0435\u0447\u043A\u0430"
+  recipeID: 7
+  requiredIngredients:
+  - {fileID: 11400000, guid: fc718eac55cb7b1d69eb4bfe44bb38eb, type: 2}
+  - {fileID: 11400000, guid: 67e035a0b372ed1c08381919bb81f982, type: 2}
+  - {fileID: 11400000, guid: 67e035a0b372ed1c08381919bb81f982, type: 2}
+  - {fileID: 11400000, guid: d9174d32bc91f48638741ec09d65b6fe, type: 2}
+  - {fileID: 11400000, guid: d9174d32bc91f48638741ec09d65b6fe, type: 2}
+  - {fileID: 11400000, guid: d9174d32bc91f48638741ec09d65b6fe, type: 2}
+  - {fileID: 11400000, guid: d9174d32bc91f48638741ec09d65b6fe, type: 2}
+  - {fileID: 11400000, guid: 29e72c6b5cde844149a34d3c1f339786, type: 2}
+  crystal: {fileID: 11400000, guid: ae760c19d67a48699be2eeb6da376d82, type: 2}
+  targetStrength: 0.5
+  finalTeaPrefab: {fileID: 3583283680083532761, guid: 9b895c27312d0ab6cb59a9dacffe0b45, type: 3}
+  Icon: {fileID: 0}
+  Emotion: "\u0417\u0430\u0431\u043E\u0442\u0430"
+  Tagline: "\u041F\u0440\u0438\u0432\u044B\u0447\u043D\u044B\u0439 \u0432\u043A\u0443\u0441
+    \u0441\u0432\u0435\u0436\u0435\u0438\u0441\u043F\u0435\u0447\u0435\u043D\u043D\u043E\u0439
+    \u0431\u0443\u043B\u043E\u0447\u043A\u0438"
+  emotionCategory: 0

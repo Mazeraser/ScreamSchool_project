@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Codebase.Mechanics.Data;
 using Codebase.Mechanics.BlendingNBrewingSystem.BlendingStates;
+using Codebase.UI;
 using Sirenix.OdinInspector;
 
 namespace Codebase.Mechanics.BlendingNBrewingSystem
@@ -87,7 +88,7 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
                 targetShakeTotal += ing.ShakeContribution;
             if (progressSlider != null)
             {
-                progressSlider.maxValue = Mathf.Max(targetShakeTotal + 1f, 1f);
+                progressSlider.maxValue = Mathf.Max(targetShakeTotal*2, 1f);
             }
         }
         public void AddIngredient(IngredientData ingredient)
@@ -120,12 +121,13 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
          public void StartShaking()
         {
             if(_currentState != BlendingStates.AddingIngredients){
-                Debug.LogError("Nothing to blend");
+                NotificationManager.Instance.ShowNotification("Нечего смешивать – добавьте ингредиенты!", NotificationType.Warning);
                 return;
             }
             ChangeState((int)BlendingStates.Shaking);
             lastMousePosition = Input.mousePosition;
             currentShakeProgress = 0f;
+            NotificationManager.Instance.ShowNotification("Начинайте трясти!", NotificationType.Info);
             UpdateProgressUI();
         }
         public void UpdateShaking()
@@ -156,11 +158,11 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
             ChangeState((int)BlendingStates.Ready);
             if (currentShakeProgress >= lower && currentShakeProgress <= upper)
             {
-                Debug.Log("Чайный купаж готов");
+                NotificationManager.Instance.ShowNotification("Чайный купаж готов! Идеальная консистенция.", NotificationType.Success);
             }
             else
             {
-                Debug.Log("Чайный купаж испорчен");
+                NotificationManager.Instance.ShowNotification("Купаж испорчен – встряхнуто не так.", NotificationType.Error);
             }
             lastBlendSuccessful = (currentShakeProgress >= lower && currentShakeProgress <= upper);
         }

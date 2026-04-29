@@ -1,12 +1,14 @@
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Sirenix.OdinInspector;
-using Codebase.Mechanics.Data;
-using System.Linq;
 using Codebase.Mechanics.BlendingNBrewingSystem.BrewingStates;
 using Codebase.Mechanics.GuestSystem.GuestStates;
+using Codebase.Mechanics.Data;
+using Codebase.UI;
+using Sirenix.OdinInspector;
 
 namespace Codebase.Mechanics.BlendingNBrewingSystem
 {
@@ -31,16 +33,22 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         [FoldoutGroup("Компоненты")]
         [SerializeField, Required] private Transform brewOutputPoint;
         [FoldoutGroup("Компоненты")]
+        [SerializeField, Required] private Transform guestServePoint;
+        [FoldoutGroup("Компоненты")]
         [SerializeField] private Image crystalFlame;
         [FoldoutGroup("Компоненты")]
         [SerializeField] private Slider strengthSlider;
         [FoldoutGroup("Компоненты")]
         [SerializeField] private Image filledSliderArea;
+        [FoldoutGroup("Компоненты")]
+        [SerializeField] private ParticleSystem particleSystem;
 
         [FoldoutGroup("Настройки")]
-        [SerializeField] private Color wrongColor;
+        [SerializeField] private Color lowColor;
         [FoldoutGroup("Настройки")]
-        [SerializeField] private Color rightColor;
+        [SerializeField] private Color midColor;
+        [FoldoutGroup("Настройки")]
+        [SerializeField] private Color highColor;
 
         [FoldoutGroup("Настройки")]
         [SerializeField,LabelText("Скорость варки")] private float brewRate = 0.1f;
@@ -66,6 +74,8 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
 
         [FoldoutGroup("Данные"), ShowInInspector, ReadOnly]
         internal bool isFlameLit;
+
+        public event Action<RecipeData> OnBrewingSuccess;
 
         public void ChangeState(int stateID)
         {
@@ -105,36 +115,38 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         {
             if (_currentState != BrewingStates.Idle)
             {
-                Debug.LogWarning("Можно загружать купаж только в состоянии Idle");
+                NotificationManager.Instance.ShowNotification("Можно загружать купаж только в состоянии ожидания.", NotificationType.Warning);
                 return;
             }
             if (!blend.IsBlendSuccessful)
             {
-                Debug.Log("Купаж испорчен – не подходит для варки");
+                NotificationManager.Instance.ShowNotification("Купаж испорчен – не подходит для варки.", NotificationType.Error);
                 return;
             }
 
             FindAllMatchingRecipes(blend.Ingredients);
             if (matchedRecipes.Count == 0)
             {
-                Debug.Log("Для этого набора ингредиентов нет рецепта");
+                NotificationManager.Instance.ShowNotification("Для этого набора ингредиентов нет рецепта.", NotificationType.Warning);
                 return;
             }
 
             currentBlend = blend;
             ChangeState((int)BrewingStates.BlendLoaded);
+            NotificationManager.Instance.ShowNotification("Купаж загружен. Теперь поместите магический кристалл.", NotificationType.Success);
         }
 
         public void PlaceCrystal(CrystalData data)
         {
             if (_currentState != BrewingStates.BlendLoaded)
             {
-                Debug.LogWarning("Сначала загрузите купаж");
+                NotificationManager.Instance.ShowNotification("Сначала загрузите купаж!", NotificationType.Warning);
                 return;
             }
 
             placedCrystal = data;
             ChangeState((int)BrewingStates.CrystalPlaced);
+            NotificationManager.Instance.ShowNotification($"Кристалл {data.crystalName} установлен. Зажгите его!", NotificationType.Info);
         }
         private void UpdateStrengthUI()
         {
@@ -148,13 +160,12 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
                         filledSliderArea.color=Color.white;
                     }
                     else{
-                        var matchedRecipe = FindMatchingRecipe(MatchedRecipes,placedCrystal);
-                        float target = matchedRecipe.targetStrength;
-                        float lower = target - EvaluationState.STRENGTH_TOLERANCY;
-                        float upper = target + EvaluationState.STRENGTH_TOLERANCY;
-                        bool success = currentStrength >= lower && currentStrength <= upper;
-
-                        filledSliderArea.color=success?rightColor:wrongColor;
+                        if(currentStrength<=0.33)
+                            filledSliderArea.color=lowColor;
+                        else if(currentStrength<=0.66)
+                            filledSliderArea.color=midColor;
+                        else if(currentStrength<=1)
+                            filledSliderArea.color=highColor;
                     }
                 }
             }
@@ -163,26 +174,38 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         {
             if (_currentState != BrewingStates.CrystalPlaced)
             {
-                Debug.LogWarning("Сначала поставьте кристалл");
+                NotificationManager.Instance.ShowNotification("Сначала поставьте кристалл!", NotificationType.Warning);
                 return;
             }
 
             isFlameLit = true;
             currentStrength = 0f;
             UpdateStrengthUI();
+            particleSystem?.Play();
             ChangeState((int)BrewingStates.Brewing);
+            NotificationManager.Instance.ShowNotification("Кристалл горит! Начинается варка.", NotificationType.Info);
         }
         private void EvaluateBrewResult()
         {
             brewedRecipe = FindMatchingRecipe(MatchedRecipes,placedCrystal);
+            if (brewedRecipe == null)
+            {
+                NotificationManager.Instance.ShowNotification("Ошибка: рецепт не найден! Что-то пошло не так.", NotificationType.Error);
+                ChangeState((int)BrewingStates.Done);
+                return;
+            }
 
             float target = brewedRecipe.targetStrength;
             float lower = target - EvaluationState.STRENGTH_TOLERANCY;
             float upper = target + EvaluationState.STRENGTH_TOLERANCY;
 
             bool success = currentStrength >= lower && currentStrength <= upper; 
-            Debug.Log($"Текущая крепость-{currentStrength} Необходимо {lower}-{upper}");
-            Debug.Log(success ? "Чай удался!" : "Чай испорчен: крепость не та");
+            if (success)
+            {
+                NotificationManager.Instance.ShowNotification($"Чай «{brewedRecipe.recipeName}» удался! Крепость идеальна.", NotificationType.Success);
+            }
+            
+            OnBrewingSuccess?.Invoke(brewedRecipe);
 
             ChangeState((int)BrewingStates.Done);
         }
@@ -191,6 +214,7 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
             if (_currentState != BrewingStates.Brewing) return;
 
             isFlameLit = false;
+            particleSystem?.Stop();
             EvaluateBrewResult();
         }
         [Button("Сбросить машину"), FoldoutGroup("Отладка")]
@@ -209,7 +233,7 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         {
             if (_currentState != BrewingStates.Done)
             {
-                Debug.LogWarning("Сначала завершите варку");
+                NotificationManager.Instance.ShowNotification("Сначала завершите варку!", NotificationType.Warning);
                 return;
             }
 
@@ -219,8 +243,13 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
                 var teaComponent = teaObject.GetComponent<BrewedTea>();
                 if (teaComponent != null)
                 {
-                    teaComponent.Initialize(brewedRecipe);
+                    teaComponent.Initialize(brewedRecipe, guestServePoint);
                 }
+                NotificationManager.Instance.ShowNotification($"Чай разлит! Можете подавать гостю.", NotificationType.Success);
+            }
+            else
+            {
+                NotificationManager.Instance.ShowNotification("Нечего разливать – варка не завершена или рецепт повреждён.", NotificationType.Error);
             }
             ResetMachine();
         }

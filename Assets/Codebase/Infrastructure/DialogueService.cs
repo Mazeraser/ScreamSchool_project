@@ -1,19 +1,21 @@
 using System;
+using System.Collections;
 using Ink.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem; // New Input System
 
 namespace Codebase.Infrastructure
 {
     public class DialogueManager : MonoBehaviour
     {
         //BUG: Сделать заморозку камеры
-        //TODO: Добавить имя персонажа в диалоговое окно
         public static DialogueManager Instance { get; private set; }
 
         [Header("UI Elements")]
         [SerializeField] private GameObject dialoguePanel;
+        [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI dialogueText;
         [SerializeField] private Button continueButton;
         
@@ -25,19 +27,20 @@ namespace Codebase.Infrastructure
         public bool IsDialogueActive => isDialogueActive;
         
         private bool isTyping = false;
-        private string currentText;
-        private float typingTimer;
-        private int currentCharIndex;
+        private Coroutine typingCoroutine;
 
-        private Action onDialogueFinished;
+        public Action onDialogueFinished;
         private Action onDialogueStarted;
+        public event Action<string> OnDialogueLineShown;
+
+        // New Input System action
+        private InputAction continueAction;
 
         private void Awake()
         {
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -50,44 +53,122 @@ namespace Codebase.Infrastructure
                 
             if (continueButton != null)
                 continueButton.onClick.AddListener(ContinueDialogue);
+
+            // Настройка Input Action
+            continueAction = new InputAction("Continue");
+            continueAction.AddBinding("<Keyboard>/space");
+            continueAction.AddBinding("<Keyboard>/enter");
+            continueAction.AddBinding("<Mouse>/leftButton");
+            continueAction.performed += SkipTyping;
         }
-        private void Update()
+
+        private void OnEnable()
         {
-            if (!isDialogueActive) return;
-            
-            if (isTyping)
+            continueAction?.Enable();
+        }
+
+        private void OnDisable()
+        {
+            continueAction?.Disable();
+        }
+
+        private void OnDestroy()
+        {
+            if (continueAction != null)
             {
-                typingTimer -= Time.deltaTime;
-                if (typingTimer <= 0)
-                {
-                    if (currentCharIndex < currentText.Length)
-                    {
-                        dialogueText.text += currentText[currentCharIndex];
-                        currentCharIndex++;
-                        typingTimer = textSpeed;
-                    }
-                    else
-                    {
-                        isTyping = false;
-                        // Показываем кнопку продолжения, если нет активных выборов
-                        if (continueButton != null && currentStory.currentChoices.Count == 0)
-                            continueButton.gameObject.SetActive(true);
-                    }
-                }
+                continueAction.performed -= SkipTyping;
+                continueAction.Dispose();
             }
         }
 
-        private void ShowDialogueText(string text)
+        private string ParseRichText(string raw)
         {
-            currentText = text;
-            dialogueText.text = "";
-            currentCharIndex = 0;
-            isTyping = true;
-            typingTimer = 0;
+            if (string.IsNullOrEmpty(raw))
+                return raw;
+
+            bool boldOpen = false;
+            string withBold = System.Text.RegularExpressions.Regex.Replace(raw, @"\(b\)", match =>
+            {
+                boldOpen = !boldOpen;
+                return boldOpen ? "<b>" : "</b>";
+            });
+
+            bool italicOpen = false;
+            string withItalic = System.Text.RegularExpressions.Regex.Replace(withBold, @"\(c\)", match =>
+            {
+                italicOpen = !italicOpen;
+                return italicOpen ? "<i>" : "</i>";
+            });
+
+            return withItalic;
         }
+
+        private IEnumerator TypeText(string fullText)
+        {
+            isTyping = true;
+            dialogueText.text = fullText;
+            dialogueText.maxVisibleCharacters = 0;
+            
+            // Ждём обновления текстового компонента, чтобы получить корректный characterCount
+            yield return null;
+            dialogueText.ForceMeshUpdate();
+            int totalVisibleChars = dialogueText.textInfo.characterCount;
+            
+            int visibleCount = 0;
+            while (visibleCount < totalVisibleChars)
+            {
+                float timer = textSpeed;
+                while (timer > 0f)
+                {
+                    if (!isTyping) // если был сброс печати (пропуск)
+                    {
+                        dialogueText.maxVisibleCharacters = totalVisibleChars;
+                        isTyping = false;
+                        if (continueButton != null && currentStory.currentChoices.Count == 0)
+                            continueButton.gameObject.SetActive(true);
+                        yield break;
+                    }
+                    timer -= Time.deltaTime;
+                    yield return null;
+                }
+                visibleCount++;
+                dialogueText.maxVisibleCharacters = visibleCount;
+            }
+            
+            isTyping = false;
+            if (continueButton != null && currentStory.currentChoices.Count == 0)
+                continueButton.gameObject.SetActive(true);
+        }
+
+        // Показать текст с эффектом печати
+        private void ShowDialogueText(string rawText)
+        {
+            if (typingCoroutine != null)
+                StopCoroutine(typingCoroutine);
+            
+            string richText = ParseRichText(rawText);
+            OnDialogueLineShown?.Invoke(nameText.text+": "+richText);
+            typingCoroutine = StartCoroutine(TypeText(richText));
+        }
+
+        // Немедленно показать весь текст (пропуск печати)
+        private void SkipTyping(InputAction.CallbackContext context)
+        {
+            if (typingCoroutine != null)
+            {
+                isTyping = false;
+            }
+        }
+
         private void EndDialogue()
         {
             isDialogueActive = false;
+            
+            if (typingCoroutine != null)
+            {
+                StopCoroutine(typingCoroutine);
+                typingCoroutine = null;
+            }
             
             if (dialoguePanel != null)
                 dialoguePanel.SetActive(false);
@@ -98,10 +179,12 @@ namespace Codebase.Infrastructure
             onDialogueStarted = null;
             currentStory = null;
         }
+
         public void ContinueDialogue()
         {
             if (!isDialogueActive || currentStory == null) return;
             
+            // Скрываем кнопку продолжения, пока грузится следующая реплика
             if (continueButton != null)
                 continueButton.gameObject.SetActive(false);
             
@@ -115,10 +198,14 @@ namespace Codebase.Infrastructure
                 EndDialogue();
             }
         }
-        public void StartDialogue(TextAsset inkJSON, Action onFinished = null, Action onStarted = null)
+
+        public void StartDialogue(TextAsset inkJSON, Action onFinished = null, Action onStarted = null, string name="")
         {
             onDialogueFinished = onFinished;
             onDialogueStarted = onStarted;
+
+            if(nameText != null)
+                nameText.text = name;
 
             if (inkJSON == null)
             {
@@ -126,6 +213,13 @@ namespace Codebase.Infrastructure
                 onDialogueFinished?.Invoke();
                 return;
             }
+            
+            if (typingCoroutine != null)
+            {
+                StopCoroutine(typingCoroutine);
+                typingCoroutine = null;
+            }
+            
             currentStory = new Story(inkJSON.text);
             isDialogueActive = true;
 

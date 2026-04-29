@@ -46,6 +46,7 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
         }
         private void TriggerDispense()
         {
+            ResetHandle();
             if (brewingMachine != null)
             {
                 Debug.Log("DispenseHandle: Полный оборот, разливаем чай");
@@ -83,7 +84,7 @@ namespace Codebase.Mechanics.BlendingNBrewingSystem
             {
                 float mouseDelta = Input.mousePosition.x-initialMousePosition.x;
                 
-                currentRotation = initialRotation + mouseDelta * rotationSpeed * 0.01f;
+                currentRotation = initialRotation - mouseDelta * rotationSpeed * 0.01f;
             }
         }
         private void HandleRotation()
